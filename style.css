@@ -1,0 +1,9 @@
+.msw_popup {
+	display: grid;
+	gap: 1em;
+}
+.msw_popup .mes, .msw_popup .mes_text {
+	padding: 0;
+	margin: 0;
+	text-align: left;
+}
