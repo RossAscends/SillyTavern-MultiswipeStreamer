@@ -4,6 +4,7 @@ import { getContext } from "../../../extensions.js";
 let dlg;
 let dom;
 let swipes = [];
+let cols = 0;
 
 function cancelGen() {	
 	$('#send_form .mes_stop').click();
@@ -25,7 +26,6 @@ function handleStream(text) {
 			const Popup = getContext().Popup;
 			dom = document.createElement('div');
 			dom.classList.add('msw_popup');
-			dom.style.gridTemplateColumns = `repeat(${streamingProcessor.swipes.length + 1}, 1fr)`;
 			dlg = new Popup(dom, getContext().POPUP_TYPE.TEXT, null, {
 				wide: true,
 				wider: true,
@@ -36,6 +36,10 @@ function handleStream(text) {
 			});
 			dlg.show();
 			dlg.dlg.style.width = 'unset';
+		}
+		if (streamingProcessor.swipes.length > cols) {
+			cols = streamingProcessor.swipes.length;
+			dom.style.gridTemplateColumns = `repeat(${streamingProcessor.swipes.length + 1}, 1fr)`;
 		}
 		[text, ...streamingProcessor.swipes].forEach((swipe, idx)=>{
 			if (!swipes[idx]) {
@@ -62,7 +66,8 @@ jQuery(async () => {
 		dom = null;
 		dlg = null;
 		swipes = [];
+		cols = 0;
 	});
 	eventSource.on(event_types.STREAM_TOKEN_RECEIVED, handleStream);
-	eventSource.on(event_types.GENERATION_ENDED, closePopup);
+	// eventSource.on(event_types.GENERATION_ENDED, closePopup);
 });
